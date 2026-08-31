@@ -21,7 +21,6 @@ public class MessageController {
     }
 
     @MessageMapping("/chat.private")
-    @SendTo("/user/queue/messages")
     public void sendPrivateMessage(Message message) {
         message.setTimestamp(new Date());
         messageRepository.save(message);
@@ -30,7 +29,6 @@ public class MessageController {
     }
 
     @MessageMapping("/chat.group")
-    @SendTo("")
     public void sendGroupMessage(Message message) {
         message.setTimestamp(new Date());
         messageRepository.save(message);
