@@ -48,7 +48,7 @@ public class UserService {
         existing.setEmail(user.getEmail());
         existing.setPassword(user.getPassword());
         existing.setAvatarUrl(user.getAvatarUrl());
-        return existing;
+        return userRepository.save(existing);
     }
 
     public boolean deleteUser(String id) {
@@ -110,7 +110,7 @@ public class UserService {
             return null;
         }
         user.setAvatarUrl(avatarUrl);
-        return user;
+        return userRepository.save(user);
     }
 }
 
