@@ -18,9 +18,6 @@ public class CommunityServerController {
     // todo: validation on admin id and user id
     public ResponseEntity getServers() {
         var currentServers = communityServerService.getServers();
-        if (CollectionUtils.isEmpty(currentServers)) {
-            return ResponseEntity.noContent().build();
-        }
         return ResponseEntity.ok(currentServers);
     }
 
