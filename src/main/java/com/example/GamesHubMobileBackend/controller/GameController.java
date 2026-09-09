@@ -1,6 +1,7 @@
 package com.example.GamesHubMobileBackend.controller;
 
 import com.example.GamesHubMobileBackend.models.Game;
+import com.example.GamesHubMobileBackend.repositories.GameRepository;
 import com.example.GamesHubMobileBackend.repositories.SchedulerConfigRepository;
 import com.example.GamesHubMobileBackend.repositories.SteamGameRepository;
 import com.example.GamesHubMobileBackend.services.GameService;
@@ -16,14 +17,16 @@ public class GameController {
 
     private GameService gameService;
     private SteamService steamService;
+    private GameRepository gameRepository;
     private SteamGameRepository steamGameRepository;
     private SchedulerConfigRepository schedulerConfigRepository;
 
-    public GameController(GameService gameService, SteamService steamService, SteamGameRepository steamGameRepository, SchedulerConfigRepository schedulerConfigRepository) {
+    public GameController(GameService gameService, SteamService steamService, SteamGameRepository steamGameRepository, SchedulerConfigRepository schedulerConfigRepository, GameRepository gameRepository) {
         this.gameService = gameService;
         this.steamService  = steamService;
         this.steamGameRepository = steamGameRepository;
         this.schedulerConfigRepository = schedulerConfigRepository;
+        this.gameRepository = gameRepository;
     }
 
     @GetMapping("/games/steam-applist/check")
@@ -130,6 +133,13 @@ public class GameController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         List<Game> games = gameService.getGamesPaged(page, size);
+        return ResponseEntity.ok(games);
+    }
+
+
+    @PostMapping("/games/batch")
+    public ResponseEntity<Object> getGamesByIds(@RequestBody List<String> gameIds) {
+        List<Game> games = gameRepository.findAllById(gameIds);
         return ResponseEntity.ok(games);
     }
 }

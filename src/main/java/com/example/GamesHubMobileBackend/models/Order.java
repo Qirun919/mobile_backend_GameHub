@@ -18,5 +18,5 @@ public class Order {
     private double totalPrice;
     private String paymentStatus;
     private String stripePaymentIntentId;
-    private String checkoutUrl;
+    private String clientSecret;
 }

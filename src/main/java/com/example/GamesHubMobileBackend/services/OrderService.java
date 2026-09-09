@@ -130,10 +130,10 @@ public class OrderService {
             if (order == null) {
                 return null;
             }
-            Session session = paymentService.createCheckoutSession(order.getTotalPrice(), "myr", orderId);
-            order.setStripePaymentIntentId(session.getId());
-            order.setCheckoutUrl(session.getUrl());
-        order.setPaymentStatus("pending");
+        PaymentIntent intent = paymentService.createPaymentIntent(order.getTotalPrice(), "myr");
+        order.setStripePaymentIntentId(intent.getId());
+        order.setClientSecret(intent.getClientSecret());
+        order.setPaymentStatus("pending_payment");
         return orderRepository.save(order);
     }
 
