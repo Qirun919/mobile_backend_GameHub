@@ -16,8 +16,15 @@ public class Game {
     private int steamGameId;
     private String title;
     private String description;
+    private String detailedDescription;
     private GameImage coverImage;
     private List<GameImage> screenshots;
     private String trailerUrl;
     private double price;
+    private List<Genre> genres;
+    private List<String> developers;
+    private List<String> publishers;
+    private String releaseDate;
+    private List<String> categories;
+    private Platforms platforms;
 }

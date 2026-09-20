@@ -1,5 +1,6 @@
 package com.example.GamesHubMobileBackend.repositories;
 
+import com.example.GamesHubMobileBackend.models.Game;
 import com.example.GamesHubMobileBackend.models.SteamGame;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

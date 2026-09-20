@@ -3,10 +3,7 @@ package com.example.GamesHubMobileBackend.services;
 import com.example.GamesHubMobileBackend.ResponseModels.SteamAppListItem;
 import com.example.GamesHubMobileBackend.ResponseModels.SteamAppListResponse;
 import com.example.GamesHubMobileBackend.enums.ImageType;
-import com.example.GamesHubMobileBackend.models.Game;
-import com.example.GamesHubMobileBackend.models.GameImage;
-import com.example.GamesHubMobileBackend.models.SchedulerConfig;
-import com.example.GamesHubMobileBackend.models.SteamGame;
+import com.example.GamesHubMobileBackend.models.*;
 import com.example.GamesHubMobileBackend.repositories.GameRepository;
 import com.example.GamesHubMobileBackend.repositories.SchedulerConfigRepository;
 import com.example.GamesHubMobileBackend.repositories.SteamGameRepository;
@@ -103,6 +100,55 @@ public class SteamService {
             Map firstMovie = movies.get(0);
             String trailerUrl = (String) firstMovie.get("hls_h264");
             game.setTrailerUrl(trailerUrl);
+        }
+
+        // genre
+        List<Map> genreData = (List<Map>) data.get("genres");
+        List<Genre> genres = new ArrayList<>();
+        if (genreData != null) {
+            for (Map genreMap : genreData) {
+                Genre genre = new Genre();
+                genre.setId((String) genreMap.get("id"));
+                genre.setDescription((String) genreMap.get("description"));
+                genres.add(genre);
+            }
+        }
+        game.setGenres(genres);
+
+        // detailed description
+        game.setDetailedDescription((String) data.get("detailed_description"));
+
+        // developers
+        game.setDevelopers((List<String>) data.get("developers"));
+
+        // publishers
+        game.setPublishers((List<String>) data.get("publishers"));
+
+        // release date
+        Map releaseDateMap = (Map) data.get("release_date");
+        if (releaseDateMap != null) {
+            game.setReleaseDate((String) releaseDateMap.get("date"));
+        }
+
+        // categories
+        List<Map> categoryData = (List<Map>) data.get("categories");
+        List<String> categories = new ArrayList<>();
+        if (categoryData != null) {
+            for (Map cat : categoryData) {
+                categories.add((String) cat.get("description"));
+            }
+        }
+        game.setCategories(categories);
+
+
+        // platforms
+        Map platformsData = (Map) data.get("platforms");
+        if (platformsData != null) {
+            Platforms platforms = new Platforms();
+            platforms.setWindows(Boolean.TRUE.equals(platformsData.get("windows")));
+            platforms.setMac(Boolean.TRUE.equals(platformsData.get("mac")));
+            platforms.setLinux(Boolean.TRUE.equals(platformsData.get("linux")));
+            game.setPlatforms(platforms);
         }
 
         return game;
@@ -245,6 +291,13 @@ public class SteamService {
                 existing.setCoverImage(freshData.getCoverImage());
                 existing.setScreenshots(freshData.getScreenshots());
                 existing.setTrailerUrl(freshData.getTrailerUrl());
+                existing.setGenres(freshData.getGenres());
+                existing.setDetailedDescription(freshData.getDetailedDescription());
+                existing.setDevelopers(freshData.getDevelopers());
+                existing.setPublishers(freshData.getPublishers());
+                existing.setReleaseDate(freshData.getReleaseDate());
+                existing.setCategories(freshData.getCategories());
+                existing.setPlatforms(freshData.getPlatforms());
                 updateCount++;
             } else {
                 gameRepository.save(freshData);

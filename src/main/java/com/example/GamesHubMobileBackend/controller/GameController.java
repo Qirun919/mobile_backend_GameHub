@@ -136,10 +136,28 @@ public class GameController {
         return ResponseEntity.ok(games);
     }
 
+    @GetMapping("/games/filter")
+    public ResponseEntity<Object> getGamesByGenre(@RequestParam String genre) {
+        List<Game> games = gameService.getGamesByGenre(genre);
+        if (CollectionUtils.isEmpty(games)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(games);
+    }
+
 
     @PostMapping("/games/batch")
     public ResponseEntity<Object> getGamesByIds(@RequestBody List<String> gameIds) {
         List<Game> games = gameRepository.findAllById(gameIds);
+        return ResponseEntity.ok(games);
+    }
+
+    @GetMapping("/games/search")
+    public ResponseEntity<Object> searchGames(@RequestParam String keyword) {
+        List<Game> games = gameService.searchGames(keyword);
+        if (CollectionUtils.isEmpty(games)) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(games);
     }
 }

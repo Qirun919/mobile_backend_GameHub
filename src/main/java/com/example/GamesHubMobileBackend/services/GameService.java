@@ -83,6 +83,15 @@ public class GameService {
         int end = Math.min(start + size, allGames.size());
         return allGames.subList(start, end);
     }
+
+
+    public List<Game> getGamesByGenre(String genre) {
+        return gameRepository.findByGenresDescription(genre);
+    }
+
+    public List<Game> searchGames(String keyword) {
+        return gameRepository.findByTitleContainingIgnoreCase(keyword);
+    }
 }
 
 
