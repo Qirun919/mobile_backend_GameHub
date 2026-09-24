@@ -92,6 +92,14 @@ public class GameService {
     public List<Game> searchGames(String keyword) {
         return gameRepository.findByTitleContainingIgnoreCase(keyword);
     }
+
+    public List<Game> getGamesByGenre(String genre, int page, int size) {
+        List<Game> all = gameRepository.findByGenresDescription(genre);
+        int start = page * size;
+        if (start >= all.size()) return new ArrayList<>();
+        int end = Math.min(start + size, all.size());
+        return all.subList(start, end);
+    }
 }
 
 

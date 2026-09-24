@@ -12,6 +12,7 @@ public class Review {
     @Id
     private String id;
     private String userId;
+    private String username;
     private String gameId;
     private String content;
     private int rating;

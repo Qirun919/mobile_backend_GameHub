@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class GameController {
@@ -136,15 +138,6 @@ public class GameController {
         return ResponseEntity.ok(games);
     }
 
-    @GetMapping("/games/filter")
-    public ResponseEntity<Object> getGamesByGenre(@RequestParam String genre) {
-        List<Game> games = gameService.getGamesByGenre(genre);
-        if (CollectionUtils.isEmpty(games)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(games);
-    }
-
 
     @PostMapping("/games/batch")
     public ResponseEntity<Object> getGamesByIds(@RequestBody List<String> gameIds) {
@@ -159,6 +152,32 @@ public class GameController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(games);
+    }
+
+    @GetMapping("/games/filter")
+    public ResponseEntity<Object> getGamesByGenre(
+            @RequestParam String genre,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<Game> games = gameService.getGamesByGenre(genre, page, size);
+        if (CollectionUtils.isEmpty(games)) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        return ResponseEntity.ok(games);
+    }
+
+    @GetMapping("/games/genres")
+    public ResponseEntity<Object> getAllGenres() {
+        List<Game> games = gameService.getGames();
+        List<String> genres = games.stream()
+                .filter(g -> g.getGenres() != null)
+                .flatMap(g -> g.getGenres().stream())
+                .map(genre -> genre.getDescription())
+                .filter(Objects::nonNull)
+                .distinct()
+                .sorted()
+                .collect(java.util.stream.Collectors.toList());
+        return ResponseEntity.ok(genres);
     }
 }
 

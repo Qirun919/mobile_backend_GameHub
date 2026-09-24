@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+
 @RestController
 public class ReviewController {
 
@@ -29,7 +31,7 @@ public class ReviewController {
     public ResponseEntity getReviewsByGame(@PathVariable String gameId) {
         var reviews = reviewService.getReviewsByGameId(gameId);
         if (CollectionUtils.isEmpty(reviews)) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(Collections.emptyList());
         }
         return ResponseEntity.ok(reviews);
     }
